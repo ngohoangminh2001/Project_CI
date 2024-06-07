@@ -1,0 +1,240 @@
+/* #root {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+.logo {
+  height: 6em;
+  padding: 1.5em;
+  will-change: filter;
+  transition: filter 300ms;
+}
+.logo:hover {
+  filter: drop-shadow(0 0 2em #646cffaa);
+}
+.logo.react:hover {
+  filter: drop-shadow(0 0 2em #61dafbaa);
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  a:nth-of-type(2) .logo {
+    animation: logo-spin infinite 20s linear;
+  }
+}
+
+.card {
+  padding: 2em;
+}
+
+.read-the-docs {
+  color: #888;
+} */
+
+
+
+#parent-div,
+#div-1-2,
+.div2021,
+.div201,
+.div2011 {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+}
+
+#parent-div {
+    text-align: center;
+}
+
+#div-1,
+#div-2,
+.div201,
+.div202 {
+    border: 1px solid black;
+    font: 1em sans-serif;
+}
+
+.div202 {
+    padding: 25px;
+    text-align: left;
+}
+
+.div20 {
+    width: 90%;
+    margin: 15px 30px;
+}
+
+#add-new-task,
+#search {
+    width: 85%;
+    height: 30px;
+    padding-left: 10px;
+}
+
+#div-1-1,
+#div-1-2 {
+    text-align: left;
+    margin-left: 40px;
+}
+
+#due-date-1,
+.priority {
+    width: 87%;
+    height: 33px;
+    padding-left: 10px;
+}
+
+.due-date-2,
+.priority-selection {
+    width: 95%;
+    height: 33px;
+    padding-left: 10px;
+}
+
+.priority-selection,
+.priority-text {
+    margin-left: 15px;
+}
+
+#add {
+    margin-top: 50px;
+    width: 88%;
+    height: 32px;
+    margin-bottom: 375px;
+    background-color: green;
+    color: white;
+    border: none;
+}
+
+#add:hover {
+    background-color: greenyellow;
+    color: black;
+}
+
+.div201 {
+    text-align: left;
+    padding: 15px;
+}
+
+.tick {
+    margin-top: 7.5px;
+    display: none;
+}
+
+.task-name {
+    margin-top: 12.5px;
+}
+
+.detail {
+    width: 140px;
+    height: 30px;
+    background-color: blue;
+    color: white;
+    border: none;
+    margin-left: 50px;
+}
+
+.detail:hover {
+    background-color: lightskyblue;
+    color: black;
+}
+
+.remove {
+    margin-left: 78px;
+    height: 30px;
+    width: 85px;
+    background-color: crimson;
+    color: white;
+    border: none;
+    padding-left: 14px;
+    margin-top: 13px;
+}
+
+.remove:hover {
+    background-color: red;
+    color: black;
+}
+
+.tasks {
+    padding-left: 10px;
+    height: 30px;
+    width: 97%;
+}
+
+.description {
+    width: 99%;
+}
+
+.update, .cancel {
+    margin-top: 30px;
+    text-align: center;
+    width: 100%;
+    height: 30px;
+    color: white;
+    border: none;
+}
+
+.update {
+    background-color: green;
+}
+
+.cancel {
+    background-color: red;
+    display: none;
+}
+
+.update:hover, .cancel:hover {
+    color: black;
+}
+
+.update:hover {
+    background-color: greenyellow;
+}
+
+.cancel:hover {
+    background-color: lightcoral;
+}
+
+.div2012 {
+    margin-top: 10px;
+}
+
+#minh {
+    color: red;
+    text-align: left;
+    margin-left: 50px;
+}
+
+#div-2 {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+}
+
+#bulk-action {
+    width: 100%;
+    background-color: lightgray;
+    margin-top: 20px;
+    height: 100px;
+    display: none;
+}
+
+#bulk-text {
+    margin-left: 30px;
+}
+
+#bulk-text, #bulk-buttons {
+    display: flex;
+    align-items: center;
+}
