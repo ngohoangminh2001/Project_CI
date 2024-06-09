@@ -63,8 +63,6 @@ function App() {
     const [taskDueDate, setTaskDueDate] = useState(new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate());
     const [taskPriority, setTaskPriority] = useState('Normal');
 
-    console.log(toDoTasks);
-
     return (
         <>
             {/* <div>

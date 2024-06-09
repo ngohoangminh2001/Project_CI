@@ -51,6 +51,7 @@ const Task = (props) => {
                         props.handleChange({ ...tempTask });
                         alert("Updated successfully!");
                         setShowDiv202(false);
+                        console.log(tempTask);
                     }}>Update</button>
                     <button class="cancel" onClick={() => {
                         setShowDiv202(false);
