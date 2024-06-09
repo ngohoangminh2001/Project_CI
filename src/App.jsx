@@ -152,8 +152,8 @@ function App() {
                             <p>Bulk Action:</p>
                         </div>
                         <div id="bulk-buttons">
-                            <button class="detail" id="done">Done</button>
-                            <button class="remove" id="delete">Remove</button>
+                            <button class="done">Done</button>
+                            <button class="remove">Remove</button>
                         </div>
                     </div>
                 </div>

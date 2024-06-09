@@ -5,6 +5,7 @@ const Task = (props) => {
     const [tempTask, setTempTask] = useState(props.task);
     const [doneTask, setDoneTask] = useState(false);
     const [removeTask, setRemoveTask] = useState(false);
+    const [showDiv202, setShowDiv202] = useState(false);
 
     const handleChange = (e) => {
         setTempTask({
@@ -23,11 +24,12 @@ const Task = (props) => {
                     </div>
                     <div class="div2012">
                         {doneTask && <p>Done</p>}
-                        {!doneTask && <button class="detail" onClick={(e) => { props.complete({ ...tempTask }); setDoneTask(true); console.log(tempTask); }}>Mark as done</button>}
+                        {!doneTask && <button class="detail" onClick={(e) => { setShowDiv202(true); }}>Show details</button>}
+                        {!doneTask && <button class="done" onClick={(e) => { props.complete({ ...tempTask }); setDoneTask(true); setShowDiv202(false); console.log(tempTask); }}>Mark as done</button>}
                         {!doneTask && <button class="remove" onClick={(e) => { props.remove({ ...tempTask }); setRemoveTask(true); console.log(tempTask); }}>Remove</button>}
                     </div>
                 </div>
-                <div class="div202">
+                {showDiv202 && <div class="div202">
                     <input type="text" class="tasks" placeholder={props.name} onChange={handleChange}></input>
                     <p><b>Description</b></p>
                     <textarea name="" class="description" cols="30" rows="10" placeholder="Lorem Ipsum...." onChange={handleChange}></textarea>
@@ -47,11 +49,13 @@ const Task = (props) => {
                     </div>
                     <button class="update" onClick={() => {
                         props.handleChange({ ...tempTask });
-                        
                         alert("Updated successfully!");
+                        setShowDiv202(false);
                     }}>Update</button>
-                    <button class="cancel">Cancel</button>
-                </div>
+                    <button class="cancel" onClick={() => {
+                        setShowDiv202(false);
+                    }}>Cancel</button>
+                </div>}
             </div>}
         </div>
     )

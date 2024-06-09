@@ -135,29 +135,44 @@
     margin-top: 12.5px;
 }
 
-.detail {
+.detail, .done {
     width: 140px;
     height: 30px;
-    background-color: blue;
     color: white;
     border: none;
     margin-left: 50px;
+    margin-top: 10px;
+}
+
+.detail {
+    background-color: aqua;
+}
+
+.done {
+    background-color: blue;
+}
+
+.detail:hover, .done:hover {
+    color: black;
 }
 
 .detail:hover {
+    background-color: aquamarine;
+}
+
+.done:hover {
     background-color: lightskyblue;
-    color: black;
 }
 
 .remove {
     margin-left: 78px;
     height: 30px;
-    width: 85px;
+    width: 88px;
     background-color: crimson;
     color: white;
     border: none;
     padding-left: 14px;
-    margin-top: 13px;
+    margin-top: 10px;
 }
 
 .remove:hover {
@@ -190,7 +205,6 @@
 
 .cancel {
     background-color: red;
-    display: none;
 }
 
 .update:hover, .cancel:hover {
