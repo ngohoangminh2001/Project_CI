@@ -1,163 +1,165 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-import Task from './Task.jsx'
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import './App.css';
+import Task from './Task.jsx';
+
+const API_URL = 'https://667e6fdef2cb59c38dc5a97e.mockapi.io/tasks';
 
 function App() {
-    const [count, setCount] = useState(0);
-
-    const [toDoTasks, setToDoTasks] = useState([
-        {
-            id: 0,
-            name: 'Do homework',
-            description: '',
-            dueDate: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
-            priority: 'Normal',
-            completed: false,
-            removed: false,
-        },
-        {
-            id: 1,
-            name: 'Do housework',
-            description: '',
-            dueDate: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
-            priority: 'Normal',
-            completed: false,
-            removed: false,
-        },
-        {
-            id: 2,
-            name: 'Learn something',
-            description: '',
-            dueDate: new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate(),
-            priority: 'Normal',
-            completed: false,
-            removed: false,
-        }
-    ]);
-
-    const completeTask = (task) => {
-        task.completed = true
-    }
-
-    const removeTask = (task) => {
-        task.removed = true
-    }
-
-    const updateTask = (task) => {
-        let tdt = [...toDoTasks];
-        tdt[task.id].name = task.name;
-        tdt[task.id].description = task.description;
-        tdt[task.id].dueDate = task.dueDate;
-        tdt[task.id].priority = task.priority;
-        tdt[task.id].completed = task.completed;
-        tdt[task.id].removed = task.removed;
-        setToDoTasks(tdt);
-    }
-
+    const [toDoTasks, setToDoTasks] = useState([]);
     const [nameSearch, setNameSearch] = useState('');
-
     const [taskName, setTaskName] = useState('');
     const [taskDescription, setTaskDescription] = useState('');
-    const [taskDueDate, setTaskDueDate] = useState(new Date().getFullYear() + '-' + (new Date().getMonth() + 1) + '-' + new Date().getDate());
+    const [taskDueDate, setTaskDueDate] = useState(new Date().toISOString().slice(0, 10));
     const [taskPriority, setTaskPriority] = useState('Normal');
 
+    useEffect(() => {
+        axios.get(API_URL)
+            .then(response => setToDoTasks(response.data))
+            .catch(error => console.error('Error fetching tasks:', error));
+    }, []);
+
+    const addTask = () => {
+        const newTask = {
+            name: taskName,
+            description: taskDescription,
+            dueDate: taskDueDate,
+            priority: taskPriority,
+            completed: false,
+            removed: false,
+        };
+
+        axios.post(API_URL, newTask)
+            .then(response => {
+                setToDoTasks([...toDoTasks, response.data]);
+                setTaskName('');
+                setTaskDescription('');
+                setTaskDueDate(new Date().toISOString().slice(0, 10));
+                setTaskPriority('Normal');
+                alert("Add task successfully!");
+            })
+            .catch(error => console.error('Error adding task:', error));
+    };
+
+    const updateTask = (updatedTask) => {
+        axios.put(`${API_URL}/${updatedTask.id}`, updatedTask)
+            .then(response => {
+                setToDoTasks(toDoTasks.map(task => task.id === updatedTask.id ? response.data : task));
+            })
+            .catch(error => console.error('Error updating task:', error));
+    };
+
+    const completeTask = (taskId) => {
+        const task = toDoTasks.find(task => task.id === taskId);
+        const updatedTask = { ...task, completed: true };
+
+        axios.put(`${API_URL}/${taskId}`, updatedTask)
+            .then(response => {
+                setToDoTasks(toDoTasks.map(task => task.id === taskId ? response.data : task));
+            })
+            .catch(error => console.error('Error marking task as complete:', error));
+    };
+
+    const removeTask = (taskId) => {
+        axios.delete(`${API_URL}/${taskId}`)
+            .then(() => {
+                setToDoTasks(toDoTasks.filter(task => task.id !== taskId));
+            })
+            .catch(error => console.error('Error removing task:', error));
+    };
+
+    const sortTasks = (tasks) => {
+        return tasks.sort((a, b) => {
+            const priorityOrder = { 'High': 1, 'Normal': 2, 'Low': 3 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+    };
+
+    const sortedTasks = sortTasks([...toDoTasks]);
+
     return (
-        <>
-            {/* <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p> */}
-            <div id="parent-div">
-                <div id="div-1">
-                    <h1 id="new-task">New Task</h1>
-                    <input id="add-new-task" placeholder="Add new task ..." value={taskName} onChange={(e) => {
-                        setTaskName(e.target.value);
-                    }}></input>
-                    <p id="minh"><b id="required"></b></p>
-                    <div id="div-1-1">
-                        <p><b>Description</b></p>
-                        <textarea name="" id="new-task-description" cols="72" rows="10" placeholder="Lorem Ipsum...." value={taskDescription} onChange={(e) => {
-                            setTaskDescription(e.target.value);
-                        }}></textarea>
+        <div id="parent-div">
+            <div id="div-1">
+                <h1 id="new-task">New Task</h1>
+                <input
+                    id="add-new-task"
+                    placeholder="Add new task ..."
+                    value={taskName}
+                    onChange={(e) => setTaskName(e.target.value)}
+                />
+                <p id="minh"><b id="required"></b></p>
+                <div id="div-1-1">
+                    <p><b>Description</b></p>
+                    <textarea
+                        id="new-task-description"
+                        cols="72"
+                        rows="10"
+                        placeholder="Lorem Ipsum...."
+                        value={taskDescription}
+                        onChange={(e) => setTaskDescription(e.target.value)}
+                    />
+                </div>
+                <div id="div-1-2">
+                    <div id="div-1-2-1">
+                        <p><b>Due Date</b></p>
+                        <input
+                            type="date"
+                            id="due-date-1"
+                            className="due-date"
+                            value={taskDueDate}
+                            onChange={(e) => setTaskDueDate(e.target.value)}
+                        />
                     </div>
-                    <div id="div-1-2">
-                        <div id="div-1-2-1">
-                            <p><b>Due Date</b></p>
-                            <input type="date" id="due-date-1" class="due-date" value={taskDueDate} onChange={(e) => {
-                                setTaskDueDate(e.target.value);
-                            }}></input>
-                        </div>
-                        <div id="div-1-2-2">
-                            <p><b>Priority</b></p>
-                            <select name="" class="priority" id="priority-selection" value={taskPriority} onChange={(e) => {
-                                setTaskPriority(e.target.value);
-                            }}>
-                                <option>Low</option>
-                                <option>Normal</option>
-                                <option>High</option>
-                            </select>
-                        </div>
-                    </div>
-                    <div id="div-1-3">
-                        <button id="add" onClick={() => {
-                            let tdt = [...toDoTasks];
-                            tdt.push({
-                                id: tdt.length,
-                                name: taskName,
-                                description: taskDescription,
-                                dueDate: taskDueDate,
-                                priority: taskPriority,
-                                completed: false,
-                                removed: false,
-                            });
-                            setToDoTasks(tdt);
-                            console.log(tdt);
-                            alert("Add task successfully!");
-                        }}>Add</button>
+                    <div id="div-1-2-2">
+                        <p><b>Priority</b></p>
+                        <select
+                            className="priority"
+                            id="priority-selection"
+                            value={taskPriority}
+                            onChange={(e) => setTaskPriority(e.target.value)}
+                        >
+                            <option>Low</option>
+                            <option>Normal</option>
+                            <option>High</option>
+                        </select>
                     </div>
                 </div>
-                <div id="div-2">
-                    <h1 id="to-do-list">To Do List</h1>
-                    <input id="search" placeholder="Search ..." value={nameSearch} onChange={(e) => {
-                        setNameSearch(e.target.value);
-                    }}></input>
-                    <p></p>
+                <div id="div-1-3">
+                    <button id="add" onClick={addTask}>Add</button>
+                </div>
+            </div>
+            <div id="div-2">
+                <h1 id="to-do-list">To Do List</h1>
+                <input
+                    id="search"
+                    placeholder="Search ..."
+                    value={nameSearch}
+                    onChange={(e) => setNameSearch(e.target.value)}
+                />
+                <p></p>
 
-                    {toDoTasks.map((task) => {
-                        return (nameSearch ? ((task.name.trim().toLowerCase()).includes(nameSearch.trim().toLowerCase()) && <Task key={task.id} task={task} complete={completeTask} remove={removeTask} handleChange={updateTask} name={task.name} description={task.description} dueDate={task.dueDate} priority={task.priority} completed={task.completed} removed={task.removed}></Task>) : (<Task key={task.id} task={task} complete={completeTask} remove={removeTask} handleChange={updateTask} name={task.name} description={task.description} dueDate={task.dueDate} priority={task.priority} completed={task.completed} removed={task.removed}></Task>))
-                    })}
+                {sortedTasks.filter(task => task.name.toLowerCase().includes(nameSearch.toLowerCase())).map((task) => (
+                    <Task
+                        key={task.id}
+                        task={task}
+                        complete={completeTask}
+                        remove={removeTask}
+                        handleChange={updateTask}
+                    />
+                ))}
 
-                    <div id="bulk-action">
-                        <div id="bulk-text">
-                            <p>Bulk Action:</p>
-                        </div>
-                        <div id="bulk-buttons">
-                            <button class="done">Done</button>
-                            <button class="remove">Remove</button>
-                        </div>
+                <div id="bulk-action">
+                    <div id="bulk-text">
+                        <p>Bulk Action:</p>
+                    </div>
+                    <div id="bulk-buttons">
+                        <button className="done">Done</button>
+                        <button className="remove">Remove</button>
                     </div>
                 </div>
             </div>
-        </>
-    )
+        </div>
+    );
 }
 
-export default App
+export default App;

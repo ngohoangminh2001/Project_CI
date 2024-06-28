@@ -1,65 +1,147 @@
-import React, { useState } from 'react'
-import './App.css'
+import React, { useState } from 'react';
+import './App.css';
 
-const Task = (props) => {
-    const [tempTask, setTempTask] = useState(props.task);
-    const [doneTask, setDoneTask] = useState(false);
-    const [removeTask, setRemoveTask] = useState(false);
+const Task = ({ task, complete, remove, handleChange }) => {
+    const [tempTask, setTempTask] = useState(task);
+    const [doneTask, setDoneTask] = useState(task.completed);
+    const [removeTask, setRemoveTask] = useState(task.removed);
     const [showDiv202, setShowDiv202] = useState(false);
 
-    const handleChange = (e) => {
+    const handleChangeInput = (e) => {
+        const { name, value } = e.target;
         setTempTask({
-            ...props.task,
-            [e.target.name]: e.target.value
+            ...tempTask,
+            [name]: value
         });
-    }
+    };
+
+    const getPriorityClass = (priority) => {
+        switch (priority) {
+            case 'High':
+                return 'priority-high';
+            case 'Normal':
+                return 'priority-normal';
+            case 'Low':
+                return 'priority-low';
+            default:
+                return '';
+        }
+    };
 
     return (
         <div>
-            {!removeTask && <div class="div20">
-                <div class="div201">
-                    <div class="div2011">
-                        <input type="checkbox" class="tick" name="tick"></input>
-                        <label class="task-name" for="tick">{props.name}</label>
+            {!removeTask && (
+                <div className={`div20 ${getPriorityClass(task.priority)}`}>
+                    <div className="div201">
+                        <div className="div2011">
+                            <input
+                                type="checkbox"
+                                className="tick"
+                                name="tick"
+                                checked={doneTask}
+                                onChange={() => {
+                                    complete(task.id);
+                                    setDoneTask(!doneTask);
+                                }}
+                            />
+                            <label className="task-name" htmlFor="tick">
+                                {task.name}
+                            </label>
+                        </div>
+                        <div className="div2012">
+                            {doneTask && <p>Done</p>}
+                            {!doneTask && (
+                                <>
+                                    <button
+                                        className="detail"
+                                        onClick={() => setShowDiv202(!showDiv202)}
+                                    >
+                                        {showDiv202 ? 'Hide details' : 'Show details'}
+                                    </button>
+                                    <button
+                                        className="done"
+                                        onClick={() => {
+                                            complete(task.id);
+                                            setDoneTask(true);
+                                            setShowDiv202(false);
+                                        }}
+                                    >
+                                        Mark as done
+                                    </button>
+                                </>
+                            )}
+                            <button
+                                className="remove"
+                                onClick={() => {
+                                    remove(task.id);
+                                    setRemoveTask(true);
+                                }}
+                            >
+                                Remove
+                            </button>
+                        </div>
                     </div>
-                    <div class="div2012">
-                        {doneTask && <p>Done</p>}
-                        {!doneTask && <button class="detail" onClick={(e) => { setShowDiv202(true); }}>Show details</button>}
-                        {!doneTask && <button class="done" onClick={(e) => { props.complete({ ...tempTask }); setDoneTask(true); setShowDiv202(false); console.log(tempTask); }}>Mark as done</button>}
-                        {!doneTask && <button class="remove" onClick={(e) => { props.remove({ ...tempTask }); setRemoveTask(true); console.log(tempTask); }}>Remove</button>}
-                    </div>
+                    {showDiv202 && (
+                        <div className="div202">
+                            <input
+                                type="text"
+                                className="tasks"
+                                name="name"
+                                value={tempTask.name}
+                                onChange={handleChangeInput}
+                            />
+                            <p><b>Description</b></p>
+                            <textarea
+                                className="description"
+                                name="description"
+                                cols="30"
+                                rows="10"
+                                value={tempTask.description}
+                                onChange={handleChangeInput}
+                            />
+                            <div className="div2021">
+                                <div className="div20211">
+                                    <p><b>Due Date</b></p>
+                                    <input
+                                        type="date"
+                                        className="due-date-2"
+                                        name="dueDate"
+                                        value={tempTask.dueDate}
+                                        onChange={handleChangeInput}
+                                    />
+                                </div>
+                                <div className="div20212">
+                                    <p className="priority-text"><b>Priority</b></p>
+                                    <select
+                                        className="priority-selection"
+                                        name="priority"
+                                        value={tempTask.priority}
+                                        onChange={handleChangeInput}
+                                    >
+                                        <option>Low</option>
+                                        <option>Normal</option>
+                                        <option>High</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <button
+                                className="save"
+                                onClick={() => handleChange(tempTask)}
+                            >
+                                Save
+                            </button>
+                            <button
+                                className="cancel"
+                                onClick={() => setShowDiv202(false)}
+                            >
+                                Cancel
+                            </button>
+                        </div>
+                    )}
                 </div>
-                {showDiv202 && <div class="div202">
-                    <input type="text" class="tasks" placeholder={props.name} onChange={handleChange}></input>
-                    <p><b>Description</b></p>
-                    <textarea name="" class="description" cols="30" rows="10" placeholder="Lorem Ipsum...." onChange={handleChange}></textarea>
-                    <div class="div2021">
-                        <div class="div20211">
-                            <p><b>Due Date</b></p>
-                            <input type="date" class="due-date-2" onChange={handleChange}></input>
-                        </div>
-                        <div class="div20212">
-                            <p class="priority-text"><b>Priority</b></p>
-                            <select name="" class="priority-selection" onChange={handleChange}>
-                                <option>Low</option>
-                                <option>Normal</option>
-                                <option>High</option>
-                            </select>
-                        </div>
-                    </div>
-                    <button class="update" onClick={() => {
-                        props.handleChange({ ...tempTask });
-                        alert("Updated successfully!");
-                        setShowDiv202(false);
-                        console.log(tempTask);
-                    }}>Update</button>
-                    <button class="cancel" onClick={() => {
-                        setShowDiv202(false);
-                    }}>Cancel</button>
-                </div>}
-            </div>}
+            )}
         </div>
-    )
-}
+    );
+};
 
-export default Task
+export default Task;
