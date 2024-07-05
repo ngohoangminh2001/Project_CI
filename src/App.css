@@ -267,3 +267,38 @@
     background-color: lightyellow;
     color: black;
 }
+
+/* Button styles */
+.button {
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin: 5px;
+    border-radius: 5px;
+    color: #fff;
+}
+
+.button.done {
+    background-color: #28a745; /* Green */
+}
+
+.button.remove {
+    background-color: #343a40; /* Dark gray or black */
+}
+
+.button.detail {
+    background-color: #007bff; /* Blue */
+}
+
+.button.save {
+    background-color: #17a2b8; /* Light Blue */
+}
+
+.button.cancel {
+    background-color: #6c757d; /* Gray */
+}
+
+/* Hover states */
+.button:hover {
+    opacity: 0.8;
+}

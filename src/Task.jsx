@@ -53,13 +53,13 @@ const Task = ({ task, complete, remove, handleChange }) => {
                             {!doneTask && (
                                 <>
                                     <button
-                                        className="detail"
+                                        className="button detail"
                                         onClick={() => setShowDiv202(!showDiv202)}
                                     >
                                         {showDiv202 ? 'Hide details' : 'Show details'}
                                     </button>
                                     <button
-                                        className="done"
+                                        className="button done"
                                         onClick={() => {
                                             complete(task.id);
                                             setDoneTask(true);
@@ -71,7 +71,7 @@ const Task = ({ task, complete, remove, handleChange }) => {
                                 </>
                             )}
                             <button
-                                className="remove"
+                                className="button remove"
                                 onClick={() => {
                                     remove(task.id);
                                     setRemoveTask(true);
@@ -125,13 +125,13 @@ const Task = ({ task, complete, remove, handleChange }) => {
                                 </div>
                             </div>
                             <button
-                                className="save"
+                                className="button save"
                                 onClick={() => handleChange(tempTask)}
                             >
                                 Save
                             </button>
                             <button
-                                className="cancel"
+                                className="button cancel"
                                 onClick={() => setShowDiv202(false)}
                             >
                                 Cancel
