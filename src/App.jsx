@@ -70,8 +70,11 @@ function App() {
 
     const sortTasks = (tasks) => {
         return tasks.sort((a, b) => {
-            const priorityOrder = { 'High': 1, 'Normal': 2, 'Low': 3 };
-            return priorityOrder[a.priority] - priorityOrder[b.priority];
+            if (a.completed === b.completed) {
+                const priorityOrder = { 'High': 1, 'Normal': 2, 'Low': 3 };
+                return priorityOrder[a.priority] - priorityOrder[b.priority];
+            }
+            return a.completed ? 1 : -1;
         });
     };
 
